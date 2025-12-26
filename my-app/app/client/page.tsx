@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
 import styles from "./client.module.css";
-import SearchBox from "@/app/components/SearchBox"; // ✅ IMPORT
+import SearchBox from "@/app/components/SearchBox"; 
 
 export default function Page() {
   const [products, setProducts] = useState<any[]>([]);
@@ -26,12 +26,10 @@ export default function Page() {
     <div className={styles.container}>
       <h1 className={styles.title}>Product List</h1>
 
-      {/* 🔍 SEARCH BOX */}
       <div style={{ marginBottom: "20px" }}>
         <SearchBox />
       </div>
 
-      {/* 📦 PRODUCT LIST */}
       {products.map((item) => (
         <div key={item.id} className={styles.product}>
           <span>{item.title}</span>

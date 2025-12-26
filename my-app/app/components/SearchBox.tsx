@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 type Result = {
   id: number;
@@ -14,17 +15,15 @@ export default function SearchBox() {
   const [activeIndex, setActiveIndex] = useState(-1);
 
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
+  const router = useRouter();
 
-  // 🔹 Debounced Search
   useEffect(() => {
     if (!query) {
       setResults([]);
       return;
     }
 
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current);
-    }
+    if (debounceRef.current) clearTimeout(debounceRef.current);
 
     debounceRef.current = setTimeout(async () => {
       setLoading(true);
@@ -40,7 +39,6 @@ export default function SearchBox() {
     };
   }, [query]);
 
-  // 🔹 Keyboard Navigation
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (!results.length) return;
 
@@ -55,9 +53,10 @@ export default function SearchBox() {
     }
 
     if (e.key === "Enter" && activeIndex >= 0) {
-      alert(`Selected: ${results[activeIndex].title}`);
-      setQuery(results[activeIndex].title);
+      const selected = results[activeIndex];
+      setQuery(selected.title);
       setResults([]);
+      router.push(`/products/${selected.id}`);
     }
   }
 
@@ -96,13 +95,13 @@ export default function SearchBox() {
               key={item.id}
               style={{
                 padding: "8px",
-                background:
-                  index === activeIndex ? "#eee" : "#fff",
+                background: index === activeIndex ? "#eee" : "#fff",
                 cursor: "pointer",
               }}
               onMouseDown={() => {
                 setQuery(item.title);
                 setResults([]);
+                router.push(`/client/${item.id}`);
               }}
             >
               {item.title}
